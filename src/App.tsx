@@ -6,7 +6,7 @@ import Sidebar from "./components/Sidebar";
 function App() {
   const editor = useCreateBlockNote();
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen bg-stone-50">
       <Sidebar />
       <div className="flex-1 p-10">
         <BlockNoteView editor={editor} />
