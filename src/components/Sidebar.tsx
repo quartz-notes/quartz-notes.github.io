@@ -1,9 +1,9 @@
 import { PlusIcon } from "lucide-react";
 import { cn } from "../lib/utils";
-import useStore from "../store";
+import useNoteStore from "../stores/notes.store";
 
 function Sidebar() {
-  const { notes, currentNote, setNote, addNote } = useStore();
+  const { notes, currentNote, setCurrentNote, createNote } = useNoteStore();
 
   return (
     <div className="w-64 border-r border-stone-900/10 pt-10 pb-10 pl-5 pr-5">
@@ -17,14 +17,14 @@ function Sidebar() {
               note.id === currentNote &&
                 "bg-stone-300 text-stone-900 hover:bg-stone-300"
             )}
-            onClick={() => setNote(note.id)}
+            onClick={() => setCurrentNote(note.id)}
           >
             Note {note.id}
           </li>
         ))}
         <li
           className="cursor-pointer text-center transition-colors p-2 rounded text-stone-900 hover:bg-stone-100"
-          onClick={() => addNote()}
+          onClick={() => createNote()}
         >
           <PlusIcon />
         </li>
