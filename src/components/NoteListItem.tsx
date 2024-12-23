@@ -24,7 +24,8 @@ function NoteListItem({
         setCurrentNote(note.id);
       }}
     >
-      {note.title.slice(0, 15) + (note.title.length > 15 ? "..." : "")}
+      {note.title.slice(0, 15) + (note.title.length > 15 ? "..." : "") ||
+        `заметка ${note.id}`}
       <TrashButton
         onClick={(event) => {
           removeNote(note.id);
