@@ -17,7 +17,8 @@ export interface NoteData {
 export interface NoteState extends NoteData {
   setCurrentNote: (id: number) => void
   createNote: () => void,
-  updateNote: (id: number, content: Block[]) => void,
+  updateNoteContent: (id: number, content: Block[]) => void,
+  updateNoteTitle: (id: number, title: string) => void
   removeNote: (id: number) => void
 
   saveData: () => void
@@ -34,25 +35,27 @@ const useNoteStore = create<NoteState>((set, get) => ({
     set((state) => {
       const id = state.notes.length > 0 ? state.notes[state.notes.length - 1].id + 1 : 0
       return {
-        notes: [...state.notes, { id, title: `заметка ${id}`, content: [] }],
+        notes: [...state.notes, { id, title: '', content: [] }],
         currentNote: id,
       }
     })
     get().saveData()
   },
 
-  updateNote: (id: number, content: Block[]) => {
-    let title = undefined
-    
-    for (const block of content) {
-      if (block.type == "heading" && block.props.level == 1) {
-        title = block.content.filter((item) => item.type == "text")[0].text
-      }
-    }
-    
+  updateNoteContent: (id: number, content: Block[]) => {
     set((state) => ({
     notes: state.notes.map((note) => 
-      note.id === id ? { ...note, content: content, title: title || note.title } : note
+      note.id === id ? { ...note, content: content } : note
+    ),
+    }))
+    
+    get().saveData()
+  },
+
+  updateNoteTitle: (id: number, title: string) => {
+    set((state) => ({
+    notes: state.notes.map((note) => 
+      note.id === id ? { ...note, title: title } : note
     ),
     }))
     
