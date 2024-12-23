@@ -17,6 +17,8 @@ export interface NoteState extends NoteData {
   setCurrentNote: (id: number) => void
   createNote: () => void,
   updateNote: (id: number, content: Block[]) => void,
+  removeNote: (id: number) => void
+
   saveData: () => void
   loadData: () => Promise<void>
 }
@@ -26,30 +28,43 @@ const useNoteStore = create<NoteState>((set, get) => ({
   currentNote: undefined,
 
   setCurrentNote: (id: number) => set(() => ({ currentNote: id })),
-  
-  createNote: () => set((state) => {
-    const id = state.notes.length
-    return {
-      notes: [...state.notes, { id, content: [] }],
-      currentNote: id,
-    }
-  }),
+
+  createNote: () => {
+    set((state) => {
+      const id = (state.notes.at(-1)?.id || -1) + 1
+      return {
+        notes: [...state.notes, { id, content: [] }],
+        currentNote: id,
+      }
+    })
+    get().saveData()
+  },
 
   updateNote: (id: number, content: Block[]) => { 
     set((state) => ({
-    notes: state.notes.map((note, index) => 
-      index === id ? { ...note, content } : note
+    notes: state.notes.map((note) => 
+      note.id === id ? { ...note, content } : note
     ),
     }))
     get().saveData()
   },
 
-  saveData: () => set((state) => {
-    localStorageService.save({
-      notes: state.notes,
-      currentNote: state.currentNote
-    })
-    return {}
+  removeNote: (id: number) => {
+    if (get().notes.length === 1) return
+    
+    set((state) => ({
+      notes: state.notes.filter((note) => note.id !== id),
+    }))
+    set((state) => ({
+      currentNote: state.currentNote === id ? (state.notes[0].id) : state.currentNote,
+    }))
+
+    get().saveData()
+  },
+
+  saveData: () => localStorageService.save({
+      notes: get().notes,
+      currentNote: get().currentNote
   }),
 
   loadData: async () => {
