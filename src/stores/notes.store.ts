@@ -31,7 +31,7 @@ const useNoteStore = create<NoteState>((set, get) => ({
 
   createNote: () => {
     set((state) => {
-      const id = (state.notes.at(-1)?.id || -1) + 1
+      const id = state.notes.length > 0 ? state.notes[state.notes.length - 1].id + 1 : 0
       return {
         notes: [...state.notes, { id, content: [] }],
         currentNote: id,
