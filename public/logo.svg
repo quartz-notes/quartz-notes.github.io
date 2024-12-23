@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="636" height="449" viewBox="0 0 636 449" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gradient_1" gradientUnits="userSpaceOnUse" x1="170.766" y1="0" x2="170.766" y2="341.533">
+      <stop offset="0" stop-color="#FFF3F6" />
+      <stop offset="1" stop-color="#FFB6D3" />
+    </linearGradient>
+  </defs>
+  <g>
+    <rect width="636" height="449" />
+    <path id="Rectangle" d="M0 97.5807L97.5807 0L341.533 243.952L243.952 341.533L0 97.5807Z" fill="url(#gradient_1)" fill-rule="evenodd" transform="translate(1 102)" />
+    <path id="Rectangle" d="M243.952 0L341.533 97.5807L97.5808 341.533L0 243.952L243.952 0Z" fill="url(#gradient_1)" fill-rule="evenodd" transform="translate(286 102)" />
+    <rect id="Rectangle" width="138" height="444" fill="url(#gradient_1)" fill-rule="evenodd" transform="translate(245 0)" />
+  </g>
+</svg>
