@@ -1,4 +1,4 @@
-import { PartialBlock } from "@blocknote/core";
+import { locales, PartialBlock } from "@blocknote/core";
 import { BlockNoteView } from "@blocknote/mantine";
 import { BlockNoteEditor } from "@blocknote/core";
 import { useMemo } from "react";
@@ -12,7 +12,10 @@ function Editor({ initialContent }: { initialContent: PartialBlock[] }) {
     if (initialContent.length === 0) {
       return BlockNoteEditor.create();
     }
-    return BlockNoteEditor.create({ initialContent });
+    return BlockNoteEditor.create({
+      initialContent: initialContent,
+      dictionary: locales.ru,
+    });
   }, [initialContent]);
 
   return (

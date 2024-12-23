@@ -11,7 +11,7 @@ function Sidebar() {
 
   return (
     <div className="w-64 border-r border-stone-900/10 dark:border-stone-50/10 pt-10 pb-10 pl-5 pr-5">
-      <h1 className="text-3xl font-bold mb-4 p-2">Notes</h1>
+      <h1 className="text-3xl font-bold mb-4 p-2">quartz</h1>
       <ul>
         {notes.map((note) => (
           <li
@@ -23,7 +23,7 @@ function Sidebar() {
             )}
             onClick={() => setCurrentNote(note.id)}
           >
-            Note {note.id}
+            заметка {note.id}
             <TrashIcon
               className="text-stone-400 dark:text-stone-500 p-0.5 rounded-md transition-colors hover:bg-stone-300 dark:hover:bg-stone-600"
               onClick={(e) => {
