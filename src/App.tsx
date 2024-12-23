@@ -21,7 +21,7 @@ function App() {
   }, [currentNote, loadData]);
 
   return (
-    <div className="flex h-screen bg-stone-50">
+    <div className="flex h-screen bg-stone-50 dark:bg-stone-900 dark:text-stone-50">
       <Sidebar />
       <div className="flex-1 p-10">
         <Editor initialContent={initialContent || []} />
