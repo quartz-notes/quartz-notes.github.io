@@ -1,5 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { locales, PartialBlock } from "@blocknote/core";
+import {
+  BlockNoteSchema,
+  defaultBlockSpecs,
+  filterSuggestionItems,
+  locales,
+  PartialBlock,
+} from "@blocknote/core";
 import { BlockNoteEditor } from "@blocknote/core";
 import { BlockNoteView } from "@blocknote/shadcn";
 import "./editor.css";
@@ -19,8 +25,50 @@ import * as Tabs from "@/shared/ui/tabs";
 import * as Toggle from "@/shared/ui/toggle";
 import * as Tooltip from "@/shared/ui/tooltip";
 import getById from "@/shared/lib/get-by-id";
+import {
+  DefaultReactSuggestionItem,
+  getDefaultReactSlashMenuItems,
+  SuggestionMenuController,
+} from "@blocknote/react";
+import { StarsIcon } from "lucide-react";
+import generateBlocks from "@/shared/api/ai/generate.service";
+
+const insertGeneratedBlocks = (editor: BlockNoteEditor) => ({
+  title: "Сгенерировать...",
+  onItemClick: async () => {
+    const currentBlock = editor.getTextCursorPosition().block;
+
+    const generatedBlocks: PartialBlock[] = await generateBlocks(
+      // @ts-expect-error blocknote...
+      currentBlock.content[0].text || ""
+    );
+
+    editor.insertBlocks(generatedBlocks, currentBlock, "after");
+  },
+  aliases: ["generate", "gen"],
+  group: "Нейросеть",
+  icon: <StarsIcon size={18} />,
+  subtext: "Используется, чтобы превратить строку в блоки",
+});
+
+const getCustomSlashMenuItems = (
+  editor: BlockNoteEditor
+): DefaultReactSuggestionItem[] => [
+  insertGeneratedBlocks(editor),
+  ...getDefaultReactSlashMenuItems(editor),
+];
 
 function Editor() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { audio, image, video, file, ...remainingBlockSpecs } =
+    defaultBlockSpecs;
+
+  const schema = BlockNoteSchema.create({
+    blockSpecs: {
+      ...remainingBlockSpecs,
+    },
+  });
+
   const updateNote = useNoteStore((state) => state.updateNoteContent);
   const notes = useNoteStore((state) => state.notes);
   const currentNote = useNoteStore((state) => state.currentNote);
@@ -44,7 +92,9 @@ function Editor() {
       });
     }
     return BlockNoteEditor.create({
-      initialContent: initialContent,
+      // @ts-expect-error blocknote types
+      initialContent: initialContent || [],
+      schema,
       ...config,
     });
   }, [initialContent]);
@@ -53,7 +103,9 @@ function Editor() {
     <>
       {/* <TitleEditor /> */}
       <BlockNoteView
+        // @ts-expect-error blocknote types
         editor={editor}
+        slashMenu={false}
         shadCNComponents={{
           Button,
           Badge,
@@ -71,7 +123,15 @@ function Editor() {
         onChange={() => {
           updateNote(currentNote, editor.document);
         }}
-      />
+      >
+        <SuggestionMenuController
+          triggerCharacter={"/"}
+          getItems={async (query) =>
+            // @ts-expect-error blocknote...
+            filterSuggestionItems(getCustomSlashMenuItems(editor), query)
+          }
+        />
+      </BlockNoteView>
     </>
   );
 }
