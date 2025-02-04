@@ -1,12 +1,15 @@
 export default async function generateBlocks(prompt: string) {
-  const response = await fetch("https://localhost:3000/api/ai/parse", {
-    method: "POST",
-    body: JSON.stringify({
-      prompt: prompt,
-    }),
-  });
+  const response = await fetch(
+    `http://localhost:8080/api/ai/parse?prompt=${prompt}`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+    }
+  );
 
   const data = await response.json();
 
-  return data;
+  return await data;
 }

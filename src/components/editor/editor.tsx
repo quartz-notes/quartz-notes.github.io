@@ -42,7 +42,6 @@ const insertGeneratedBlocks = (editor: BlockNoteEditor) => ({
       // @ts-expect-error blocknote...
       currentBlock.content[0].text || ""
     );
-
     editor.insertBlocks(generatedBlocks, currentBlock, "after");
   },
   aliases: ["generate", "gen"],
