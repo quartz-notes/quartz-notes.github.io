@@ -99,7 +99,12 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup> */}
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={removeTokens}>
+            <DropdownMenuItem
+              onClick={() => {
+                removeTokens();
+                window.location.reload();
+              }}
+            >
               <LogOut />
               Выйти
             </DropdownMenuItem>
