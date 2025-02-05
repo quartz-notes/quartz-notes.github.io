@@ -1,3 +1,4 @@
+import getSpaces from "@/shared/api/ai/spaces.service";
 import Space from "@/shared/api/models/space";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
@@ -7,7 +8,8 @@ interface SpaceState {
   currentSpace: string;
 
   setCurrentSpace: (spaceId: string) => void;
-  sync: () => Promise<Space[]>;
+  addSpace: (name: string) => void;
+  sync: () => Promise<void>;
 }
 
 const mock: Space[] = [
@@ -16,33 +18,30 @@ const mock: Space[] = [
     name: "Основное",
     logo: "star",
   },
-  {
-    id: "qwb",
-    name: "Работа",
-    logo: "command",
-  },
-  {
-    id: "qwc",
-    name: "Учёба",
-    logo: "book",
-  },
-  {
-    id: "qwd",
-    name: "Спорт",
-    logo: "volleyball",
-  },
 ];
 
 const useSpaceStore = create<SpaceState>()(
   persist(
     (set) => ({
       spaces: mock,
-      currentSpace: "qwd",
+      currentSpace: "qwa",
 
       setCurrentSpace: (spaceId: string) =>
         set(() => ({ currentSpace: spaceId })),
+      addSpace: (name: string) =>
+        set((state) => ({
+          spaces: [
+            ...state.spaces,
+            {
+              id: crypto.randomUUID(),
+              name,
+              logo: "sandwich",
+            },
+          ],
+        })),
       sync: async () => {
-        return [];
+        const spaces = await getSpaces();
+        set(() => ({ spaces }));
       },
     }),
     { name: "store:spaces" }

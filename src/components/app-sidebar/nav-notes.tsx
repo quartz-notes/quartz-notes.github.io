@@ -9,10 +9,12 @@ import {
 } from "@/shared/ui/sidebar";
 import { Plus } from "lucide-react";
 import NavNote from "./nav-note";
+import useSpaceStore from "@/app/stores/spaces.store";
 
 export function NavNotes() {
   const notes = useNoteStore((state) => state.notes);
   const createNote = useNoteStore((state) => state.createNote);
+  const currentSpace = useSpaceStore((state) => state.currentSpace);
 
   return (
     <SidebarGroup>
@@ -21,9 +23,11 @@ export function NavNotes() {
         <Plus /> <span className="sr-only">Добавить заметку</span>
       </SidebarGroupAction>
       <SidebarMenu>
-        {notes.map((note) => (
-          <NavNote key={note.id} note={note} />
-        ))}
+        {notes
+          .filter((note) => note.spaceId === currentSpace)
+          .map((note) => (
+            <NavNote key={note.id} note={note} />
+          ))}
       </SidebarMenu>
     </SidebarGroup>
   );

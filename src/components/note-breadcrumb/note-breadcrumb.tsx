@@ -10,17 +10,21 @@ import {
 } from "@/shared/ui/breadcrumb";
 import NoteTitle from "./note-title";
 import { TextMorph } from "@/shared/ui/text-morph";
+import useNoteStore from "@/app/stores/notes.store";
 
 function NoteBreadcrumb() {
   const spaces = useSpaceStore((state) => state.spaces);
-  const currentSpace = useSpaceStore((state) => state.currentSpace);
+  const notes = useNoteStore((state) => state.notes);
+  const currentNote = useNoteStore((state) => state.currentNote);
 
   return (
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem className="hidden md:block">
           <BreadcrumbLink href="#">
-            <TextMorph>{getById(spaces, currentSpace)!.name}</TextMorph>
+            <TextMorph>
+              {getById(spaces, getById(notes, currentNote)!.spaceId)!.name}
+            </TextMorph>
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator className="hidden md:block" />

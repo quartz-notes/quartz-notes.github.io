@@ -7,8 +7,25 @@ import {
 } from "@/shared/ui/sidebar";
 import Editor from "@/components/editor/editor";
 import NoteBreadcrumb from "@/components/note-breadcrumb/note-breadcrumb";
+import { useNavigate } from "react-router";
+import { useEffect } from "react";
+import { getAccessToken, getRefreshToken } from "@/shared/api/ai/jwt.service";
+import { updateTokens } from "@/shared/api/ai/auth.service";
 
 export default function HomePage() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!getRefreshToken()) {
+      navigate("/login");
+    }
+    if (!getAccessToken()) {
+      updateTokens().then(() => {
+        console.log("tokens updated");
+      });
+    }
+  });
+
   return (
     <SidebarProvider>
       <AppSidebar />

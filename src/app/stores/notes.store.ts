@@ -2,6 +2,8 @@ import Note from "@/shared/api/models/note";
 import { Block } from "@blocknote/core";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import useSpaceStore from "./spaces.store";
+import getNotes from "@/shared/api/ai/notes.service";
 
 interface NoteState {
   notes: Note[];
@@ -13,7 +15,7 @@ interface NoteState {
   updateNoteTitle: (id: number, title: string) => void;
   removeNote: (id: number) => void;
 
-  sync: () => Promise<Note[]>;
+  sync: () => Promise<void>;
 }
 
 const mock = [
@@ -21,21 +23,25 @@ const mock = [
     id: 0,
     title: "Тестовая заметка",
     content: [],
+    spaceId: "qwa",
   },
   {
     id: 1,
     title: "Еще одна",
     content: [],
+    spaceId: "qwa",
   },
   {
     id: 2,
     title: "Ноут",
     content: [],
+    spaceId: "qwa",
   },
   {
     id: 3,
     title: "XAE-Xii",
     content: [],
+    spaceId: "qwa",
   },
 ];
 
@@ -54,7 +60,15 @@ const useNoteStore = create<NoteState>()(
               ? state.notes[state.notes.length - 1].id + 1
               : 0;
           return {
-            notes: [...state.notes, { id, title: "", content: [] }],
+            notes: [
+              ...state.notes,
+              {
+                id,
+                title: "",
+                content: [],
+                spaceId: useSpaceStore.getState().currentSpace,
+              },
+            ],
             currentNote: id,
           };
         });
@@ -89,7 +103,8 @@ const useNoteStore = create<NoteState>()(
       },
 
       sync: async () => {
-        return [];
+        const notes = await getNotes();
+        set(() => ({ notes }));
       },
     }),
     { name: "store:notes" }

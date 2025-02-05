@@ -1,11 +1,11 @@
 export interface UserFlags {
-    completedOnboarding?: boolean
+  completedOnboarding?: boolean;
 }
 
 export default interface User {
-    id: string
-    name: string
-    email: string
-    avatar: string
-    flags: UserFlags
+  id: string;
+  name: string;
+  email: string;
+  avatar: string;
+  flags: UserFlags;
 }
