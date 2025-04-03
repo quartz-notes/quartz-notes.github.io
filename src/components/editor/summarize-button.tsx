@@ -9,7 +9,7 @@ export default function SummarizeButton() {
 
   return (
     <Components.FormattingToolbar.Button
-      mainTooltip={"Summarize text content"}
+      mainTooltip={"Законспектировать"}
       onClick={async () => {
         console.log(editor.getSelectedText());
 
@@ -22,7 +22,7 @@ export default function SummarizeButton() {
         editor.insertBlocks(generatedBlocks, currentBlock, "after");
       }}
     >
-      Summarize
+      Законспектировать
     </Components.FormattingToolbar.Button>
   );
 }
